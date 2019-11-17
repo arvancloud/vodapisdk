@@ -1,0 +1,20 @@
+{
+    "name": "arvan/cod-sdk",
+    "description": "This is a client package to make your development process more faster.",
+    "authors": [
+        {
+            "name": "Farshid Boroomand",
+            "email": "farshid@arvancloud.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.1.0",
+        "guzzlehttp/guzzle": "^6.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arvan\\Vod\\": "src"
+        }
+    }
+}
