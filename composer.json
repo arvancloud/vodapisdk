@@ -1,5 +1,6 @@
 {
-    "name": "arvan/cod-sdk",
+    "name": "arvan/vod-client-sdk",
+    "type": "library",
     "description": "This is a client package to make your development process more faster.",
     "authors": [
         {
@@ -8,13 +9,14 @@
         }
     ],
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "php": ">=7.1.0",
-        "guzzlehttp/guzzle": "^6.4"
+        "php": ">=7.1",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "autoload": {
         "psr-4": {
-            "Arvan\\Vod\\": "src"
+            "Arvan\\Vod\\": "src/"
         }
     }
 }
