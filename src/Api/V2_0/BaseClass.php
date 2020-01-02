@@ -248,4 +248,41 @@ abstract class BaseClass
 
         return $query;
     }
+
+    protected function createPostRequest(string $endPoint, array $body)
+    {
+        $result = null;
+
+        try {
+            $result = $this->createClientHttpRequest([
+                'method' => 'POST',
+                 'route' => $endPoint,
+                 '_tempBody' => $body,
+                 ]);
+        } catch (\Throwable $e) {
+            $result = $e->getMessage();
+        }
+
+        return $result;
+    }
+
+    protected function createGETRequest(string $endPoint, array $options = null, string $id = null)
+    {
+        $result = null;
+
+        $queryParams['filter'] = isset($options) ? $options['filter'] : null;
+        $queryParams['page'] = isset($options) ? $options['page'] : null;
+        $queryParams['per_page'] = isset($options) ? $options['per_page'] : null;
+
+        try {
+            $result = $this->createClientHttpRequest([
+                'method' => 'GET',
+                'route' => $endPoint.isset($id) ? $id : ''.'?'.$this->queryStringBuilder($queryParams),
+                ]);
+        } catch (\Throwable $e) {
+            $result = $e->getMessage();
+        }
+
+        return $result;
+    }
 }
