@@ -2,45 +2,42 @@
 
 namespace Arvan\Vod\Api\V2_0;
 
+use Arvan\Vod\Config\Routes;
+
 final class Channel extends BaseClass
 {
-    public function showAll(string $filter = null, int $page = 1, int $perPage = 15)
+    public function showAll(array $options)
     {
-        $result = null;
-
-        $queryParams['filter'] = $filter;
-        $queryParams['page'] = $page;
-        $queryParams['per_page'] = $perPage;
-
-        try {
-            $result = $this->createClientHttpRequest([
-                'method' => 'GET',
-                'route' => '/channels?'.$this->queryStringBuilder($queryParams),
-                ]);
-        } catch (\Throwable $e) {
-            echo $e->getMessage();
-        }
+        $result = $this->createGetRequest(Routes::GET_CHANNELS, $options);
 
         return $result;
     }
 
-    public function show()
+    public function show(string $channelId)
     {
+        $result = $this->createGetRequest(Routes::GET_CHANNEL, null, $channelId);
+
+        return $result;
     }
 
-    public function create()
+    public function create(array $channel)
     {
+        $result = $this->createPostRequest(Routes::CREATE_CHANNEL, $channel);
+
+        return $result;
     }
 
-    public function update()
+    public function update(array $channel)
     {
+        $result = $this->createPatchOrDeleteRequest(Routes::UPDATE_CHANNEL, 'channel_id', $channel);
+
+        return $result;
     }
 
     public function delete()
     {
-    }
+        $result = $this->createPatchOrDeleteRequest(Routes::DELETE_CHANNEL, 'channel_id', null, 'delete');
 
-    protected function dataBuilder()
-    {
+        return $result;
     }
 }
