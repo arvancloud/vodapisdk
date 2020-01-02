@@ -6,15 +6,22 @@ final class Channel extends BaseClass
 {
     public function showAll(string $filter = null, int $page = 1, int $perPage = 15)
     {
-        // $result = null;
+        $result = null;
 
-        $result = $this->createClientHttpRequest(['method' => 'GET', 'route' => '/channels']);
-        dd($result);
-        // try {
-        // } catch (\Throwable $e) {
-        // }
+        $queryParams['filter'] = $filter;
+        $queryParams['page'] = $page;
+        $queryParams['per_page'] = $perPage;
 
-        // return $result;
+        try {
+            $result = $this->createClientHttpRequest([
+                'method' => 'GET',
+                'route' => '/channels?'.$this->queryStringBuilder($queryParams),
+                ]);
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+        }
+
+        return $result;
     }
 
     public function show()
