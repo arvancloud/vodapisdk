@@ -2,30 +2,21 @@
 
 namespace Arvan\Vod\Api\V2_0;
 
+use Arvan\Vod\Config\Routes;
+
 final class UserDomain extends BaseClass
 {
     public function createDomain(array $subdomain)
     {
-        $result = null;
-
-        try {
-            $result = $this->createClientHttpRequest([
-                'method' => 'POST',
-                 'route' => '/domains',
-                 '_tempBody' => $subdomain,
-                 ]);
-        } catch (\Throwable $e) {
-            echo $e->getMessage();
-        }
+        $result = $this->createPostRequest(Routes::CREATE_USER_DOMAIN, $subdomain);
 
         return $result;
     }
 
-    public function getDomain(array $subdomain)
+    public function getDomain(array $options)
     {
-    }
+        $result = $this->createGetRequest(Routes::GET_USER_DOMAIN, $options);
 
-    protected function dataBuilder()
-    {
+        return $result;
     }
 }
