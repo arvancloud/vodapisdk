@@ -174,6 +174,7 @@ abstract class BaseClass
         if (isset($_tempBody)) {
             // $_tempBody is the method argument, if present
             $httpBody = $_tempBody;
+
             // \stdClass has no __toString(), so we should encode it manually
             if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
                 $httpBody = \GuzzleHttp\json_encode($httpBody);
@@ -240,4 +241,11 @@ abstract class BaseClass
     }
 
     abstract protected function dataBuilder();
+
+    protected function queryStringBuilder($params)
+    {
+        $query = \GuzzleHttp\Psr7\build_query($params);
+
+        return $query;
+    }
 }
