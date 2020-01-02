@@ -266,7 +266,24 @@ abstract class BaseClass
         return $result;
     }
 
-    protected function createGETRequest(string $endPoint, array $options = null, string $id = null)
+    protected function createPatchOrDeleteRequest(string $endPoint, $key, array $body = null, $method = 'PATCH')
+    {
+        $result = null;
+
+        try {
+            $result = $this->createClientHttpRequest([
+                'method' => $method,
+                 'route' => $this->urlBuilder($endPoint, $key, $body['channel_id']),
+                 '_tempBody' => $body,
+                 ]);
+        } catch (\Throwable $e) {
+            $result = $e->getMessage();
+        }
+
+        return $result;
+    }
+
+    protected function createGETRequest(string $endPoint, array $options = null)
     {
         $result = null;
 
@@ -277,7 +294,7 @@ abstract class BaseClass
         try {
             $result = $this->createClientHttpRequest([
                 'method' => 'GET',
-                'route' => $endPoint.isset($id) ? $id : ''.'?'.$this->queryStringBuilder($queryParams),
+                'route' => $endPoint.'?'.$this->queryStringBuilder($queryParams),
                 ]);
         } catch (\Throwable $e) {
             $result = $e->getMessage();
