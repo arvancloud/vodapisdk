@@ -3,11 +3,14 @@
 namespace Arvan\Vod;
 
 use Arvan\Vod\Api\V2_0\Channel;
+use Arvan\Vod\Api\V2_0\UserDomain;
 
 final class VodSdk
 {
     public static $config;
+
     public static $channelApi;
+    public static $userDomainApi;
 
     public static function setToken($apiKey)
     {
@@ -24,6 +27,15 @@ final class VodSdk
         }
 
         return static::$channelApi;
+    }
+
+    public static function userDomain()
+    {
+        if (empty(static::$userDomainApi)) {
+            static::$userDomainApi = new UserDomain();
+        }
+
+        return static::$userDomainApi;
     }
 
     private static function configuration()
