@@ -2,6 +2,7 @@
 
 namespace Arvan\Vod;
 
+use Arvan\Vod\Api\V2_0\File;
 use Arvan\Vod\Api\V2_0\Channel;
 use Arvan\Vod\Api\V2_0\UserDomain;
 
@@ -10,6 +11,7 @@ final class VodSdk
     public static $config;
 
     public static $channelApi;
+    public static $fileApi;
     public static $userDomainApi;
 
     public static function setToken($apiKey)
@@ -27,6 +29,15 @@ final class VodSdk
         }
 
         return static::$channelApi;
+    }
+
+    public static function file($channelId)
+    {
+        if (empty(static::$fileApi)) {
+            static::$fileApi = new File($channelId);
+        }
+
+        return static::$fileApi;
     }
 
     public static function userDomain()

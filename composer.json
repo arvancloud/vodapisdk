@@ -1,22 +1,21 @@
 {
-    "name": "arvan/vod-client-sdk",
-    "type": "library",
-    "description": "This is a client package to make your development process more faster.",
-    "authors": [
-        {
-            "name": "Farshid Boroomand",
-            "email": "farshid@arvancloud.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require": {
-        "php": ">=7.1",
-        "guzzlehttp/guzzle": "^6.3"
-    },
-    "autoload": {
-        "psr-4": {
-            "Arvan\\Vod\\": "src/"
-        }
+  "name": "arvan/vod-client-sdk",
+  "type": "library",
+  "description": "This is a client package to make your development process more faster.",
+  "authors": [{
+    "name": "Farshid Boroomand",
+    "email": "farshid@arvancloud.com"
+  }],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=7.1",
+    "guzzlehttp/guzzle": "^6.3",
+    "ankitpokhrel/tus-php": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Arvan\\Vod\\": "src/"
     }
+  }
 }

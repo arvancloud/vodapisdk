@@ -9,10 +9,14 @@ trait CommonFunctions
         return json_decode($body);
     }
 
-    public function urlBuilder($url, $key, $value)
+    public function urlBuilder(string $url, string $key = null, string $value = null)
     {
-        $result = str_replace("{$key}", $value, $url);
+        if (isset($key) and isset($value)) {
+            $result = str_replace("{$key}", $value, $url);
 
-        return $result;
+            return $result;
+        }
+
+        return $url;
     }
 }

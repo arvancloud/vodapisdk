@@ -6,7 +6,7 @@ use Arvan\Vod\Config\Routes;
 
 final class Channel extends BaseClass
 {
-    public function showAll(array $options)
+    public function showAll(array $options = null)
     {
         $result = $this->createGetRequest(Routes::GET_CHANNELS, $options);
 
@@ -15,7 +15,7 @@ final class Channel extends BaseClass
 
     public function show(string $channelId)
     {
-        $result = $this->createGetRequest(Routes::GET_CHANNEL, null, $channelId);
+        $result = $this->createGetRequest(Routes::GET_CHANNEL, null, 'channel_id', $channelId);
 
         return $result;
     }

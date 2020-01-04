@@ -210,6 +210,7 @@ abstract class BaseClass
             $headers
         );
 
+        // die(var_dump($headers));
         $query = \GuzzleHttp\Psr7\build_query($queryParams);
 
         return new Request(
@@ -240,7 +241,7 @@ abstract class BaseClass
         return $options;
     }
 
-    abstract protected function dataBuilder();
+    // abstract protected function dataBuilder();
 
     protected function queryStringBuilder($params)
     {
@@ -283,7 +284,7 @@ abstract class BaseClass
         return $result;
     }
 
-    protected function createGETRequest(string $endPoint, array $options = null)
+    protected function createGETRequest(string $endPoint, array $options = null, string $keyId = null, string $id = null)
     {
         $result = null;
 
@@ -294,7 +295,7 @@ abstract class BaseClass
         try {
             $result = $this->createClientHttpRequest([
                 'method' => 'GET',
-                'route' => $endPoint.'?'.$this->queryStringBuilder($queryParams),
+                'route' => $this->urlBuilder($endPoint, $keyId, $id).'?'.$this->queryStringBuilder($queryParams),
                 ]);
         } catch (\Throwable $e) {
             $result = $e->getMessage();
