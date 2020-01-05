@@ -16,10 +16,10 @@ final class File extends BaseClass
 
     const TUS_VERSION = '1.0.0';
 
-    public function channelFilesFileHead($channel, $file)
-    {
-        $this->channelFilesHeadWithHttpInfo($channel, $file);
-    }
+    // public function channelFilesFileHead($channel, $file)
+    // {
+    //     $this->channelFilesHeadWithHttpInfo($channel, $file);
+    // }
 
     public function channelFilesHeadWithHttpInfo($channel, $file)
     {
@@ -62,7 +62,7 @@ final class File extends BaseClass
         }
     }
 
-    protected function channelFilesHeadRequest($channel, $file)
+    protected function uploadResumeFileToServer($channel, $file)
     {
         // verify the required parameter 'channel' is set
         if ($channel === null || (is_array($channel) && count($channel) === 0)) {
@@ -176,20 +176,22 @@ final class File extends BaseClass
         );
     }
 
-    public function ChannelsFilesPatch($channel, $file, $tus_resumable, $upload_offset, $content_type)
-    {
-        $this->channelsFilesPatchWithHttpInfo($channel, $file, $tus_resumable, $upload_offset, $content_type);
-    }
+    // public function ChannelsFilesPatch($channel, $file, $tus_resumable, $upload_offset, $content_type)
+    // {
+    //     $this->transferFileToserver($channel, $file, $tus_resumable, $upload_offset, $content_type);
+    // }
 
-    public function channelsFilesPatchWithHttpInfo($channel, $file, $tus_resumable, $upload_offset, $content_type)
+    public function upload($url, $offset = 0, $file)
     {
         $returnType = '';
-        $request = $this->channelsFilesPatchRequest($channel, $file, $tus_resumable, $upload_offset, $content_type);
+        $request = $this->transferFileToServer($url, $offset, $file);
 
         try {
             $options = $this->createHttpClientOption();
             try {
                 $response = $this->client->send($request, $options);
+                var_dump($response);
+                die();
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
@@ -222,77 +224,36 @@ final class File extends BaseClass
         }
     }
 
-    protected function channelsFilesPatchRequest($channel, $file, $tus_resumable, $upload_offset, $content_type)
+    protected function transferFileToServer(string $url, int $offset, array $file)
     {
-        // verify the required parameter 'channel' is set
-        if ($channel === null || (is_array($channel) && count($channel) === 0)) {
+        $tus_resumable = self::TUS_VERSION;
+        $content_type = 'application/offset+octet-stream';
+
+        if ($url === null || !isset($url)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $channel when calling ChannelsFilesPatch'
-            );
-        }
-        // verify the required parameter 'file' is set
-        if ($file === null || (is_array($file) && count($file) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $file when calling ChannelsFilesPatch'
-            );
-        }
-        // verify the required parameter 'tus_resumable' is set
-        if ($tus_resumable === null || (is_array($tus_resumable) && count($tus_resumable) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $tus_resumable when calling ChannelsFilesPatch'
-            );
-        }
-        // verify the required parameter 'upload_offset' is set
-        if ($upload_offset === null || (is_array($upload_offset) && count($upload_offset) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $upload_offset when calling ChannelsFilesPatch'
-            );
-        }
-        // verify the required parameter 'content_type' is set
-        if ($content_type === null || (is_array($content_type) && count($content_type) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $content_type when calling ChannelsFilesPatch'
+                'Invalid URL'
             );
         }
 
-        $resourcePath = '/channels/{channel}/files/{file}';
-        $formParams = [];
+        $resourcePath = $url;
+        $formParams = $file;
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
 
-        // header params
         if ($tus_resumable !== null) {
             $headerParams['tus-resumable'] = ObjectSerializer::toHeaderValue($tus_resumable);
         }
-        // header params
-        if ($upload_offset !== null) {
-            $headerParams['upload-offset'] = ObjectSerializer::toHeaderValue($upload_offset);
-        }
-        // header params
+
         if ($content_type !== null) {
             $headerParams['Content-Type'] = ObjectSerializer::toHeaderValue($content_type);
         }
 
-        // path params
-        if ($channel !== null) {
-            $resourcePath = str_replace(
-                '{'.'channel'.'}',
-                ObjectSerializer::toPathValue($channel),
-                $resourcePath
-            );
-        }
-        // path params
-        if ($file !== null) {
-            $resourcePath = str_replace(
-                '{'.'file'.'}',
-                ObjectSerializer::toPathValue($file),
-                $resourcePath
-            );
+        if ($content_type !== null) {
+            $headerParams['upload-offset'] = ObjectSerializer::toHeaderValue($offset);
         }
 
-        // body params
         $_tempBody = null;
 
         if ($multipart) {
@@ -311,7 +272,7 @@ final class File extends BaseClass
             // $_tempBody is the method argument, if present
             $httpBody = $_tempBody;
 
-            if ($headers['Content-Type'] === 'application/json') {
+            if ($headers['Content-Type'] === 'application/json' || $headers['Content-Type'] === $content_type) {
                 // \stdClass has no __toString(), so we should encode it manually
                 if ($httpBody instanceof \stdClass) {
                     $httpBody = \GuzzleHttp\json_encode($httpBody);
@@ -338,6 +299,10 @@ final class File extends BaseClass
                 // for HTTP post (form)
                 $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
             }
+        } else {
+            throw new \InvalidArgumentException(
+                'File is empty'
+            );
         }
 
         // this endpoint requires API key authentication
@@ -361,7 +326,7 @@ final class File extends BaseClass
 
         return new Request(
             'PATCH',
-            $this->config->getHost().$resourcePath.($query ? "?{$query}" : ''),
+            $resourcePath.($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -523,7 +488,7 @@ final class File extends BaseClass
     //     $this->channelFilesPostWithHttpInfo($channel, $tus_resumable, $upload_length, $upload_metadata);
     // }
 
-    public function uploadFile($channelId, $file)
+    public function uploadFile($channelId, $offset, $file)
     {
         $returnType = '';
         $request = $this->createFileStorage($channelId, $file);
@@ -556,7 +521,11 @@ final class File extends BaseClass
                 );
             }
 
-            return [$this->getBodyContents($response->getBody()->getContents()), $statusCode, $response->getHeaders()];
+            $storageUrl = $response->getHeaders();
+
+            $this->upload($storageUrl['Location'][0], $offset, $file);
+
+            // return [$this->getBodyContents($response->getBody()->getContents()), $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
