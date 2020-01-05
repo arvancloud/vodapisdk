@@ -31,10 +31,10 @@ final class VodSdk
         return static::$channelApi;
     }
 
-    public static function file($channelId)
+    public static function file()
     {
         if (empty(static::$fileApi)) {
-            static::$fileApi = new File($channelId);
+            static::$fileApi = new File();
         }
 
         return static::$fileApi;
