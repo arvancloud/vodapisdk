@@ -5,6 +5,27 @@ namespace Arvan\Vod;
 class Configuration
 {
     /**
+     * User agent of the HTTP request, set to "Arvan-Vod-API" by default.
+     *
+     * @var string
+     */
+    protected $userAgent = 'Arvan-Vod-API';
+
+    /**
+     * Associate array to store API key(s).
+     *
+     * @var string[]
+     */
+    protected $apiKeys = [];
+
+    /**
+     * Associate array to store API prefix (e.g. Bearer).
+     *
+     * @var string[]
+     */
+    protected $apiKeyPrefixes = [];
+
+    /**
      * @var string
      */
     public static $apiKey;
@@ -150,5 +171,72 @@ class Configuration
         $report .= '    OpenAPI Spec Version: 2.0'.PHP_EOL;
 
         return $report;
+    }
+
+    /**
+     * Get API key (with prefix if set).
+     *
+     * @param string $apiKeyIdentifier name of apikey
+     *
+     * @return string API key with the prefix
+     */
+    public function getApiKeyWithPrefix($apiKeyIdentifier)
+    {
+        $prefix = $this->getApiKeyPrefix($apiKeyIdentifier);
+        $apiKey = $this->getApiKey($apiKeyIdentifier);
+
+        if ($apiKey === null) {
+            return null;
+        }
+
+        if ($prefix === null) {
+            $keyWithPrefix = $apiKey;
+        } else {
+            $keyWithPrefix = $prefix.' '.$apiKey;
+        }
+
+        return $keyWithPrefix;
+    }
+
+    /**
+     * Gets API key prefix.
+     *
+     * @param string $apiKeyIdentifier API key identifier (authentication scheme)
+     *
+     * @return string
+     */
+    public function getApiKeyPrefix($apiKeyIdentifier)
+    {
+        return isset($this->apiKeyPrefixes[$apiKeyIdentifier]) ? $this->apiKeyPrefixes[$apiKeyIdentifier] : null;
+    }
+
+    /**
+     * Sets the user agent of the api client.
+     *
+     * @param string $userAgent the user agent of the api client
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return $this
+     */
+    public function setUserAgent($userAgent)
+    {
+        if (!is_string($userAgent)) {
+            throw new \InvalidArgumentException('User-agent must be a string.');
+        }
+
+        $this->userAgent = $userAgent;
+
+        return $this;
+    }
+
+    /**
+     * Gets the user agent of the api client.
+     *
+     * @return string user agent
+     */
+    public function getUserAgent()
+    {
+        return $this->userAgent;
     }
 }
