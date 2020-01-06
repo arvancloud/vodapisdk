@@ -18,15 +18,9 @@ final class File extends BaseClass
 
     protected $fileInfo = [];
 
-    // public function channelFilesFileHead($channel, $file)
-    // {
-    //     $this->channelFilesHeadWithHttpInfo($channel, $file);
-    // }
-
-    public function channelFilesHeadWithHttpInfo($channel, $file)
+    public function getOffset($url)
     {
-        $returnType = '';
-        $request = $this->channelFilesHeadRequest($channel, $file);
+        $request = $this->getOffsetFromServer($url);
 
         try {
             $options = $this->createHttpClientOption();
@@ -56,52 +50,27 @@ final class File extends BaseClass
                 );
             }
 
-            return [null, $statusCode, $response->getHeaders()];
+            $response = $response->getHeaders();
+
+            var_dump($response);
+
+            return [
+                'Upload-Length' => $response['Upload-Length'][0],
+                'Upload-Offset' => $response['Upload-Offset'][0],
+            ];
         } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-            throw $e;
+            throw $e->getCode();
         }
     }
 
-    protected function uploadResumeFileToServer($channel, $file)
+    protected function getOffsetFromServer($url)
     {
-        // verify the required parameter 'channel' is set
-        if ($channel === null || (is_array($channel) && count($channel) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $channel when calling channelFilesFileHead'
-            );
-        }
-        // verify the required parameter 'file' is set
-        if ($file === null || (is_array($file) && count($file) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $file when calling channelFilesFileHead'
-            );
-        }
-
-        $resourcePath = '/channels/{channel}/files/{file}';
+        $resourcePath = $url;
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
-
-        // path params
-        if ($channel !== null) {
-            $resourcePath = str_replace(
-                '{'.'channel'.'}',
-                ObjectSerializer::toPathValue($channel),
-                $resourcePath
-            );
-        }
-        // path params
-        if ($file !== null) {
-            $resourcePath = str_replace(
-                '{'.'file'.'}',
-                ObjectSerializer::toPathValue($file),
-                $resourcePath
-            );
-        }
 
         // body params
         $_tempBody = null;
@@ -172,18 +141,13 @@ final class File extends BaseClass
 
         return new Request(
             'HEAD',
-            $this->config->getHost().$resourcePath.($query ? "?{$query}" : ''),
+            $resourcePath.($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
     }
 
-    // public function ChannelsFilesPatch($channel, $file, $tus_resumable, $upload_offset, $content_type)
-    // {
-    //     $this->transferFileToserver($channel, $file, $tus_resumable, $upload_offset, $content_type);
-    // }
-
-    public function uploadingAfterStorage($url, $offset = 0)
+    public function upload($url, $offset = 0)
     {
         $returnType = '';
         $request = $this->transferFileToServer($url, $offset);
@@ -216,11 +180,9 @@ final class File extends BaseClass
                 );
             }
 
-            return [null, $statusCode, $response->getHeaders()];
+            return [$this->getBodyContents($response->getBody()->getContents()), $statusCode];
         } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-            throw $e;
+            throw $e->getCode();
         }
     }
 
@@ -370,9 +332,7 @@ final class File extends BaseClass
 
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-            throw $e;
+            throw $e->getCode();
         }
     }
 
@@ -481,17 +441,12 @@ final class File extends BaseClass
         );
     }
 
-    // public function channelFilesPost($channel, $tus_resumable, $upload_length, $upload_metadata)
-    // {
-    //     $this->channelFilesPostWithHttpInfo($channel, $tus_resumable, $upload_length, $upload_metadata);
-    // }
-
-    public function upload($channelId, $offset, $file)
+    public function createStorage($channelId, $file)
     {
         $fileInfo = $this->fileInfoGenerator($file);
 
         $returnType = '';
-        $request = $this->createFileStorage($channelId, $fileInfo);
+        $request = $this->storageBuilder($channelId, $fileInfo);
 
         try {
             $options = $this->createHttpClientOption();
@@ -522,18 +477,20 @@ final class File extends BaseClass
             }
 
             $storageUrl = $response->getHeaders();
+            $responseHeaderLocation = $storageUrl['Location'][0];
 
-            $this->uploadingAfterStorage($storageUrl['Location'][0], $offset, $file);
+            $fileId = explode('/', $responseHeaderLocation);
 
-            // return [$this->getBodyContents($response->getBody()->getContents()), $statusCode, $response->getHeaders()];
+            return [
+                'file_id' => end($fileId),
+                'url' => $responseHeaderLocation,
+            ];
         } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-            throw $e;
+            throw $e->getCode();
         }
     }
 
-    protected function createFileStorage(string $channelId, array $file)
+    protected function storageBuilder(string $channelId, array $file)
     {
         $tus_resumable = self::TUS_VERSION;
 
@@ -688,9 +645,7 @@ final class File extends BaseClass
 
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-            throw $e;
+            throw $e->getCode();
         }
     }
 
@@ -843,9 +798,7 @@ final class File extends BaseClass
 
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-            throw $e;
+            throw $e->getCode();
         }
     }
 
