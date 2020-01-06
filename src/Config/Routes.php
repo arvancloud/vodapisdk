@@ -23,4 +23,10 @@ class Routes
     const CREATE_VIDEO = '/channels/channel_id/videos';
     const UPDATE_VIDEO = '/videos/video_id';
     const DELETE_VIDEO = '/videos/video_id';
+
+    const GET_AUDIOS = '/channels/channel_id/audios';
+    const GET_AUDIO = '/audios/audio_id';
+    const CREATE_AUDIO = '/channels/channel_id/audios';
+    const UPDATE_AUDIO = '/audios/audio_id';
+    const DELETE_AUDIO = '/audios/audio_id';
 }
