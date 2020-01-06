@@ -16,5 +16,11 @@ class Routes
     const UPLOAD_FILE = '/channels/channel_id/files';
     const GET_FILES = '/channels/channel_id/files';
     const GET_FILE = '/files/file_id';
-    const DELETE_FILE = '/files/file_id';
+    const DELETE_FILEs = '/files/file_id';
+
+    const GET_VIDEOS = '/channels/channel_id/videos';
+    const GET_VIDEO = '/videos/video_id';
+    const CREATE_VIDEO = '/channels/channel_id/videos';
+    const UPDATE_VIDEO = '/videos/video_id';
+    const DELETE_VIDEO = '/videos/video_id';
 }
