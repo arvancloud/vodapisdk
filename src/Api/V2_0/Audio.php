@@ -6,9 +6,9 @@ use Arvan\Vod\Config\Routes;
 
 final class Audio extends BaseClass
 {
-    public function showAll(array $options = null)
+    public function showAll(string $channelId, array $options = null)
     {
-        $result = $this->createGetRequest(Routes::GET_AUDIOS, $options);
+        $result = $this->createGetRequest(Routes::GET_AUDIOS, $options, 'channel_id', $channelId);
 
         return $result;
     }

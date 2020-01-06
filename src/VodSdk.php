@@ -3,6 +3,8 @@
 namespace Arvan\Vod;
 
 use Arvan\Vod\Api\V2_0\File;
+use Arvan\Vod\Api\V2_0\Audio;
+use Arvan\Vod\Api\V2_0\Video;
 use Arvan\Vod\Api\V2_0\Channel;
 use Arvan\Vod\Api\V2_0\UserDomain;
 
@@ -11,6 +13,8 @@ final class VodSdk
     public static $config;
 
     public static $channelApi;
+    public static $audioApi;
+    public static $videoApi;
     public static $fileApi;
     public static $userDomainApi;
 
@@ -29,6 +33,24 @@ final class VodSdk
         }
 
         return static::$channelApi;
+    }
+
+    public static function audio()
+    {
+        if (empty(static::$audioApi)) {
+            static::$audioApi = new Audio();
+        }
+
+        return static::$audioApi;
+    }
+
+    public static function video()
+    {
+        if (empty(static::$videoApi)) {
+            static::$videoApi = new Video();
+        }
+
+        return static::$videoApi;
     }
 
     public static function file()

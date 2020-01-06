@@ -6,9 +6,9 @@ use Arvan\Vod\Config\Routes;
 
 final class Video extends BaseClass
 {
-    public function showAll(array $options = null)
+    public function showAll(string $channelId, array $options = null)
     {
-        $result = $this->createGetRequest(Routes::GET_VIDEOS, $options);
+        $result = $this->createGetRequest(Routes::GET_VIDEOS, $options, 'channel_id', $channelId);
 
         return $result;
     }
