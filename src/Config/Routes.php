@@ -16,4 +16,5 @@ class Routes
     const UPLOAD_FILE = '/channels/channel_id/files';
     const GET_FILES = '/channels/channel_id/files';
     const GET_FILE = '/files/file_id';
+    const DELETE_FILE = '/files/file_id';
 }

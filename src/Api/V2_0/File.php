@@ -468,6 +468,13 @@ final class File extends BaseClass
         );
     }
 
+    public function delete($fileId)
+    {
+        $result = $this->createPatchOrDeleteRequest(Routes::DELETE_FILE, 'file_id', $fileId, null, 'DELETE');
+
+        return $result;
+    }
+
     private function getBase64FileAndType($file): string
     {
         $fileNameInBase64 = base64_encode($file['basename']);

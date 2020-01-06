@@ -266,14 +266,14 @@ abstract class BaseClass
         return $result;
     }
 
-    protected function createPatchOrDeleteRequest(string $endPoint, $key, array $body = null, $method = 'PATCH')
+    protected function createPatchOrDeleteRequest(string $endPoint, string $key, string $value, array $body = null, $method = 'PATCH')
     {
         $result = null;
 
         try {
             $result = $this->createClientHttpRequest([
                 'method' => $method,
-                 'route' => $this->urlBuilder($endPoint, $key, $body['channel_id']),
+                 'route' => $this->urlBuilder($endPoint, $key, $value),
                  '_tempBody' => $body,
                  ]);
         } catch (\Throwable $e) {

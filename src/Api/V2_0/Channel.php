@@ -27,16 +27,16 @@ final class Channel extends BaseClass
         return $result;
     }
 
-    public function update(array $channel)
+    public function update(string $channelId, array $channel)
     {
-        $result = $this->createPatchOrDeleteRequest(Routes::UPDATE_CHANNEL, 'channel_id', $channel);
+        $result = $this->createPatchOrDeleteRequest(Routes::UPDATE_CHANNEL, 'channel_id', $channelId, $channel);
 
         return $result;
     }
 
-    public function delete()
+    public function delete($channelId)
     {
-        $result = $this->createPatchOrDeleteRequest(Routes::DELETE_CHANNEL, 'channel_id', null, 'delete');
+        $result = $this->createPatchOrDeleteRequest(Routes::DELETE_CHANNEL, 'channel_id', $channelId, null, 'DELETE');
 
         return $result;
     }
