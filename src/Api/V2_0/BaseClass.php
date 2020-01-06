@@ -292,14 +292,14 @@ abstract class BaseClass
         $queryParams['per_page'] = isset($options) ? $options['per_page'] : null;
 
         try {
-            $result = $this->createClientHttpRequest([
+            $response = $this->createClientHttpRequest([
                 'method' => 'GET',
                 'route' => $this->urlBuilder($endPoint, $keyId, $id).'?'.$this->queryStringBuilder($queryParams),
                 ]);
         } catch (\Throwable $e) {
-            $result = $e->getMessage();
+            $response = $e->getMessage();
         }
 
-        return $result;
+        return $response;
     }
 }
