@@ -210,7 +210,6 @@ abstract class BaseClass
             $headers
         );
 
-        // die(var_dump($headers));
         $query = \GuzzleHttp\Psr7\build_query($queryParams);
 
         return new Request(

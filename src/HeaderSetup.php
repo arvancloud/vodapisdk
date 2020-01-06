@@ -63,7 +63,7 @@ final class HeaderSetup
     private function selectContentTypeHeader($contentType)
     {
         if (count($contentType) === 0 || (count($contentType) === 1 && $contentType[0] === '')) {
-            return 'application/json';
+            return 'application/offset+octet-stream';
         } elseif (preg_grep("/application\/json/i", $contentType)) {
             return 'application/json';
         } else {

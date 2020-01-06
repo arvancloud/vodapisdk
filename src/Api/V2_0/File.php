@@ -16,6 +16,8 @@ final class File extends BaseClass
 
     const TUS_VERSION = '1.0.0';
 
+    protected $fileInfo = [];
+
     // public function channelFilesFileHead($channel, $file)
     // {
     //     $this->channelFilesHeadWithHttpInfo($channel, $file);
@@ -181,17 +183,15 @@ final class File extends BaseClass
     //     $this->transferFileToserver($channel, $file, $tus_resumable, $upload_offset, $content_type);
     // }
 
-    public function upload($url, $offset = 0, $file)
+    public function uploadingAfterStorage($url, $offset = 0)
     {
         $returnType = '';
-        $request = $this->transferFileToServer($url, $offset, $file);
+        $request = $this->transferFileToServer($url, $offset);
 
         try {
             $options = $this->createHttpClientOption();
             try {
                 $response = $this->client->send($request, $options);
-                var_dump($response);
-                die();
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
@@ -224,7 +224,7 @@ final class File extends BaseClass
         }
     }
 
-    protected function transferFileToServer(string $url, int $offset, array $file)
+    protected function transferFileToServer(string $url, int $offset)
     {
         $tus_resumable = self::TUS_VERSION;
         $content_type = 'application/offset+octet-stream';
@@ -236,7 +236,7 @@ final class File extends BaseClass
         }
 
         $resourcePath = $url;
-        $formParams = $file;
+        $formParams = $this->fileInfo;
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
@@ -246,13 +246,10 @@ final class File extends BaseClass
             $headerParams['tus-resumable'] = ObjectSerializer::toHeaderValue($tus_resumable);
         }
 
-        if ($content_type !== null) {
-            $headerParams['Content-Type'] = ObjectSerializer::toHeaderValue($content_type);
-        }
+        $headerParams['Content-Type'] = ObjectSerializer::toHeaderValue($content_type);
 
-        if ($content_type !== null) {
-            $headerParams['upload-offset'] = ObjectSerializer::toHeaderValue($offset);
-        }
+        $offset = $offset !== 0 ?? $offset = 0;
+        $headerParams['upload-offset'] = ObjectSerializer::toHeaderValue($offset);
 
         $_tempBody = null;
 
@@ -266,7 +263,6 @@ final class File extends BaseClass
                 []
             );
         }
-
         // for model (json/xml)
         if (isset($_tempBody)) {
             // $_tempBody is the method argument, if present
@@ -321,6 +317,8 @@ final class File extends BaseClass
             $headerParams,
             $headers
         );
+
+        $httpBody = fopen($this->fileInfo['realpath'], 'rb');
 
         $query = \GuzzleHttp\Psr7\build_query($queryParams);
 
@@ -488,10 +486,12 @@ final class File extends BaseClass
     //     $this->channelFilesPostWithHttpInfo($channel, $tus_resumable, $upload_length, $upload_metadata);
     // }
 
-    public function uploadFile($channelId, $offset, $file)
+    public function upload($channelId, $offset, $file)
     {
+        $fileInfo = $this->fileInfoGenerator($file);
+
         $returnType = '';
-        $request = $this->createFileStorage($channelId, $file);
+        $request = $this->createFileStorage($channelId, $fileInfo);
 
         try {
             $options = $this->createHttpClientOption();
@@ -523,7 +523,7 @@ final class File extends BaseClass
 
             $storageUrl = $response->getHeaders();
 
-            $this->upload($storageUrl['Location'][0], $offset, $file);
+            $this->uploadingAfterStorage($storageUrl['Location'][0], $offset, $file);
 
             // return [$this->getBodyContents($response->getBody()->getContents()), $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
@@ -960,11 +960,27 @@ final class File extends BaseClass
 
     private function getBase64FileAndType($file): string
     {
-        $fileNameInBase64 = base64_encode($file['name']);
-        $fileTypeInBase64 = base64_encode($file['type']);
+        $fileNameInBase64 = base64_encode($file['basename']);
+        $fileTypeInBase64 = base64_encode($file['mime']);
 
         $result = "filename {$fileNameInBase64},filetype {$fileTypeInBase64}";
 
         return $result;
+    }
+
+    private function fileInfoGenerator($file): array
+    {
+        $pathinfo = pathinfo($file);
+        $stat = stat($file);
+        $this->fileInfo['realpath'] = realpath($file);
+        $this->fileInfo['dirname'] = $pathinfo['dirname'];
+        $this->fileInfo['basename'] = $pathinfo['basename'];
+        $this->fileInfo['filename'] = $pathinfo['filename'];
+        $this->fileInfo['extension'] = $pathinfo['extension'];
+        $this->fileInfo['mime'] = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file);
+        $this->fileInfo['encoding'] = finfo_file(finfo_open(FILEINFO_MIME_ENCODING), $file);
+        $this->fileInfo['size'] = $stat[7];
+
+        return $this->fileInfo;
     }
 }
