@@ -6,13 +6,14 @@ use Arvan\Vod\Api\V2_0\File;
 use Arvan\Vod\Api\V2_0\Audio;
 use Arvan\Vod\Api\V2_0\Video;
 use Arvan\Vod\Api\V2_0\Channel;
+use Arvan\Vod\Api\V2_0\Watermark;
 use Arvan\Vod\Api\V2_0\UserDomain;
 
 final class VodSdk
 {
     public static $config;
-
     public static $channelApi;
+    public static $watermarkApi;
     public static $audioApi;
     public static $videoApi;
     public static $fileApi;
@@ -33,6 +34,15 @@ final class VodSdk
         }
 
         return static::$channelApi;
+    }
+
+    public static function watermark()
+    {
+        if (empty(static::$watermarkApi)) {
+            static::$watermarkApi = new Watermark();
+        }
+
+        return static::$watermarkApi;
     }
 
     public static function audio()
