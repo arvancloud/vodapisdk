@@ -22,7 +22,10 @@ final class Channel extends BaseClass
 
     public function create(array $channel)
     {
-        $result = $this->createPostRequest(Routes::CREATE_CHANNEL, $channel);
+        $result = $this->createPostRequest(
+            Routes::CREATE_CHANNEL,
+            $channel
+        );
 
         return $result;
     }

@@ -82,7 +82,9 @@ abstract class BaseClass
             $params['route'] ?? null,
             $params['_tempBody'] ?? null,
             $params['method'] ?? 'GET',
-            $params['multipart'] ?? false);
+            $params['multipart'] ?? false,
+            $params['content_type'],
+        );
 
         try {
             $options = $this->createHttpClientOption();
@@ -138,7 +140,8 @@ abstract class BaseClass
         $route = null,
         $_tempBody = null,
         $method = 'GET',
-        $multipart = false)
+        $multipart = false,
+        $contentType)
     {
         $resourcePath = $route;
         $formParams = [];
@@ -170,14 +173,22 @@ abstract class BaseClass
             );
         }
 
+        $headers['Content-Type'] = $contentType;
+
         // for model (json/xml)
         if (isset($_tempBody)) {
             // $_tempBody is the method argument, if present
             $httpBody = $_tempBody;
 
-            // \stdClass has no __toString(), so we should encode it manually
-            if ($httpBody instanceof \stdClass && $headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($httpBody);
+            if ($headers['Content-Type'] === 'application/json') {
+                // \stdClass has no __toString(), so we should encode it manually
+                if ($httpBody instanceof \stdClass) {
+                    $httpBody = \GuzzleHttp\json_encode($httpBody);
+                }
+                // array has no __toString(), so we should encode it manually
+                if (is_array($httpBody)) {
+                    $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
+                }
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -220,13 +231,6 @@ abstract class BaseClass
         );
     }
 
-    /**
-     * Create http client option.
-     *
-     * @throws \RuntimeException on file opening failure
-     *
-     * @return array of http client options
-     */
     protected function createHttpClientOption()
     {
         $options = [];
@@ -249,15 +253,16 @@ abstract class BaseClass
         return $query;
     }
 
-    protected function createPostRequest(string $endPoint, array $body)
+    protected function createPostRequest(string $endPoint, array $body, $defaultContentTye = 'application/json')
     {
         $result = null;
 
         try {
             $result = $this->createClientHttpRequest([
                 'method' => 'POST',
-                 'route' => $endPoint,
-                 '_tempBody' => $body,
+                'route' => $this->urlBuilder($endPoint),
+                '_tempBody' => $body,
+                'content_type' => $defaultContentTye,
                  ]);
         } catch (\Throwable $e) {
             $result = $e->getMessage();
