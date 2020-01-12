@@ -16,7 +16,7 @@ class Routes
     const UPLOAD_FILE = '/channels/channel_id/files';
     const GET_FILES = '/channels/channel_id/files';
     const GET_FILE = '/files/file_id';
-    const DELETE_FILEs = '/files/file_id';
+    const DELETE_FILE = '/files/file_id';
 
     const GET_VIDEOS = '/channels/channel_id/videos';
     const GET_VIDEO = '/videos/video_id';
@@ -29,4 +29,10 @@ class Routes
     const CREATE_AUDIO = '/channels/channel_id/audios';
     const UPDATE_AUDIO = '/audios/audio_id';
     const DELETE_AUDIO = '/audios/audio_id';
+
+    const GET_WATERMARKS = '/channels/channel_id/watermarks';
+    const GET_WATERMARK = '/watermarks/watermark_id';
+    const CREATE_WATERMARK = '/channels/channel_id/watermarks';
+    const UPDATE_WATERMARK = '/watermarks/watermark_id';
+    const DELETE_WATERMARK = '/watermarks/watermark_id';
 }
