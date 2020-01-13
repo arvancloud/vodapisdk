@@ -83,7 +83,9 @@ abstract class BaseClass
             $params['_tempBody'] ?? null,
             $params['method'] ?? 'GET',
             $params['multipart'] ?? false,
-            $params['content_type'],
+            $params['content_type'] ?? 'application/json',
+            $params['hasFile'] ?? false,
+            $params['fileName'] ?? null
         );
 
         try {
@@ -141,7 +143,9 @@ abstract class BaseClass
         $_tempBody = null,
         $method = 'GET',
         $multipart = false,
-        $contentType)
+        $contentType = null,
+        $hasFile = null,
+        $fileName = null)
     {
         $resourcePath = $route;
         $formParams = [];
@@ -157,6 +161,19 @@ abstract class BaseClass
         if ($page !== null) {
             $queryParams['page'] = ObjectSerializer::toQueryValue($page);
         }
+
+        if(isset($_tempBody)) {
+            foreach ($_tempBody as $key => $value) {
+                $formParams[$key] = $value;
+            }
+        }
+
+
+        if ($hasFile) {
+            $multipart = true;
+            $formParams[$fileName] = \GuzzleHttp\Psr7\try_fopen(ObjectSerializer::toFormValue($formParams[$fileName]), 'rb');
+        }
+
         // query params
         if ($per_page !== null) {
             $queryParams['per_page'] = ObjectSerializer::toQueryValue($per_page);
@@ -169,24 +186,24 @@ abstract class BaseClass
         } else {
             $headers = $this->header->selectHeaders(
                 [],
-                []
+                ['application/json', 'multipart/form-data']
             );
         }
 
-        $headers['Content-Type'] = $contentType;
+        $_tempBody = null;
 
         // for model (json/xml)
         if (isset($_tempBody)) {
             // $_tempBody is the method argument, if present
             $httpBody = $_tempBody;
 
-            if ($headers['Content-Type'] === 'application/json') {
+            if($headers['Content-Type'] === 'application/json') {
                 // \stdClass has no __toString(), so we should encode it manually
                 if ($httpBody instanceof \stdClass) {
                     $httpBody = \GuzzleHttp\json_encode($httpBody);
                 }
                 // array has no __toString(), so we should encode it manually
-                if (is_array($httpBody)) {
+                if(is_array($httpBody)) {
                     $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
                 }
             }
@@ -196,13 +213,14 @@ abstract class BaseClass
                 foreach ($formParams as $formParamName => $formParamValue) {
                     $multipartContents[] = [
                         'name' => $formParamName,
-                        'contents' => $formParamValue,
+                        'contents' => $formParamValue
                     ];
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
             } elseif ($headers['Content-Type'] === 'application/json') {
                 $httpBody = \GuzzleHttp\json_encode($formParams);
+
             } else {
                 // for HTTP post (form)
                 $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
@@ -253,17 +271,26 @@ abstract class BaseClass
         return $query;
     }
 
-    protected function createPostRequest(string $endPoint, array $body, $defaultContentTye = 'application/json')
+    protected function createPostRequest(
+        string $endPoint,
+        array $body,
+        string $endpointKey = null,
+        string $endpointValue = null,
+        bool $hasFile = false,
+        string $fileName = null,
+        string $defaultContentTye = 'application/json')
     {
         $result = null;
 
         try {
             $result = $this->createClientHttpRequest([
                 'method' => 'POST',
-                'route' => $this->urlBuilder($endPoint),
+                'route' => $this->urlBuilder($endPoint, $endpointKey, $endpointValue),
                 '_tempBody' => $body,
                 'content_type' => $defaultContentTye,
-                 ]);
+                'hasFile' => $hasFile,
+                'fileName' => $fileName
+                ]);
         } catch (\Throwable $e) {
             $result = $e->getMessage();
         }

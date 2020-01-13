@@ -6,7 +6,7 @@ use Arvan\Vod\Config\Routes;
 
 final class Watermark extends BaseClass
 {
-    public function showAll(array $options = null, $channelId)
+    public function showAll(string $channelId, array $options = null)
     {
         $result = $this->createGetRequest(
         Routes::GET_WATERMARKS,
@@ -24,11 +24,15 @@ final class Watermark extends BaseClass
         return $result;
     }
 
-    public function create(array $watermark)
+    public function create(array $watermark, string $channelId)
     {
         $result = $this->createPostRequest(
             Routes::CREATE_WATERMARK,
-            $watermark
+            $watermark,
+            'channel_id',
+            $channelId,
+            true,
+            'watermark'
         );
 
         return $result;

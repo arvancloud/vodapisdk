@@ -20,9 +20,14 @@ final class Audio extends BaseClass
         return $result;
     }
 
-    public function create(array $audio)
+    public function create(array $audio, string $channelId)
     {
-        $result = $this->createPostRequest(Routes::CREATE_AUDIO, $audio);
+        $result = $this->createPostRequest(
+            Routes::CREATE_AUDIO,
+            $audio,
+            'channel_id',
+            $channelId
+        );
 
         return $result;
     }
