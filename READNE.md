@@ -22,13 +22,14 @@ class AppServiceProvider extends ServiceProvider
     }
 }
 
-```
-2. Usage:
-
-```php
-SomeController.php
+// SomeController.php
 
 $vodSdk = app('arvan-vod-sdk');
+
+```
+2. UserDomain:
+
+```php
 
 **
  * UserDomain:
@@ -45,7 +46,10 @@ $vodSdk = app('arvan-vod-sdk');
  
  // GET
  $getUserDomain = $userDomain->getDomain(); 
- 
+```
+3. Channel:
+
+```php
 $music = storage_path('music.mp3);
 $channelId = 'xxxx-xxxx-xxxx-xxxx';
 
