@@ -30,6 +30,22 @@ SomeController.php
 
 $vodSdk = app('arvan-vod-sdk');
 
+**
+ * UserDomain:
+ * There are only two end points for userDomains (create and show).
+ * please be informed that, create action is only available for just one time and if a user wants to change
+ * their userDomain, they need to cantact to Arvan support.
+ */
+ 
+ // POST
+ 
+ $userDomain = $vodkSdk->userDomain();
+ 
+ $createdDomain = $userDomain->createDomain(['subdomain' => 'whatever']);
+ 
+ // GET
+ $getUserDomain = $userDomain->getDomain(); 
+ 
 $music = storage_path('music.mp3);
 $channelId = 'xxxx-xxxx-xxxx-xxxx';
 
