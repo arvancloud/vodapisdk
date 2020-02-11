@@ -88,10 +88,14 @@ $channel->update('********-****-****-****-********');
 4. File:
 
 ```php
-$music = storage_path('music.mp3);
-$channelId = 'xxxx-xxxx-xxxx-xxxx';
+// GET (get the whole channel files)
 
+$channelId = 'xxxx-xxxx-xxxx-xxxx';
 $file = $vodSdk->file();
+$allChannelFiles = $file->showAll($channelId) // channel ID must be set as a string
+
+$music = storage_path('music.mp3');
 $storageUrl = $file->createStorage($channelId, $music);
-$file->upload($storageUrl);
+$uploadedFile = $file->upload($storageUrl); // response will be file id
 ```
+## congrats bro, you've just finished the first step
