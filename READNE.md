@@ -1,5 +1,7 @@
 # VOD SDK is a client package to connect to Arvan VOD API to make your life much easier :)
 
+### this package has written in pure php which can be implemented in any PHP framework. As laravel is more popular among our customers, the below code demonstrates laravel implementation.
+
 1. The Package has too registered
 ```php
 class AppServiceProvider extends ServiceProvider
@@ -96,6 +98,13 @@ $allChannelFiles = $file->showAll($channelId) // channel ID must be set as a str
 
 $music = storage_path('music.mp3');
 $storageUrl = $file->createStorage($channelId, $music);
-$uploadedFile = $file->upload($storageUrl); // response will be file id
+$uploadedFile = $file->upload($storageUrl); // response will be file id and URL, URL can be used to get file offset in order to findout whether the file is completely uploaded or not.
+
+// HEAD (Uploaded file url is required)
+$fileOffset = $file->getOffset('https://napi.arvancloud.com/**************');
+
+// DELETE (by file ID)
+
+$file->delete('********-****-****-****-********');
 ```
-## congrats bro, you've just finished the first step
+## congrats bro, you've just finished the first step,
