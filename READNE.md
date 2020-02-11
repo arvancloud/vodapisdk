@@ -172,3 +172,17 @@ $updatedVideo = $video->update('video_id', [
 
 $video->delete('********-****-****-****-********');
 ```
+6. Watermark:
+
+```php
+// GET (get all channel watermarks)
+$channelId = 'xxxx-xxxx-xxxx-xxxx';
+$watermark = $vodSdk->watermark();
+$allChannelWarermark = $watermark->showAll($channelId) // channel ID must be set as a string
+
+// GET (get specific watermkark)
+$getWatermark = $watermark->showAll('********-****-****-****-********');  //WatermarkId
+
+// Post ()
+
+```
