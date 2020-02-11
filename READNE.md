@@ -1,4 +1,4 @@
-# VOD SDK is a client package to connect to Arvan VOD API to make your life much more easier :)
+# VOD SDK is a client package to connect to Arvan VOD API to make your life much easier :)
 
 1. The Package has too registered
 ```php
