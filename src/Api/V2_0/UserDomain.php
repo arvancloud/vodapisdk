@@ -13,7 +13,7 @@ final class UserDomain extends BaseClass
         return $result;
     }
 
-    public function getDomain(array $options)
+    public function getDomain(array $options = null)
     {
         $result = $this->createGetRequest(Routes::GET_USER_DOMAIN, $options);
 

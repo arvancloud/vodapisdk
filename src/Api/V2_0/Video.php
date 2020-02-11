@@ -20,9 +20,14 @@ final class Video extends BaseClass
         return $result;
     }
 
-    public function create(array $video)
+    public function create(array $video, string $channelId)
     {
-        $result = $this->createPostRequest(Routes::CREATE_VIDEO, $video);
+        $result = $this->createPostRequest(
+            Routes::CREATE_VIDEO,
+            $video,
+            'channel_id',
+            $channelId,
+        );
 
         return $result;
     }
