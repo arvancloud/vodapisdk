@@ -4,9 +4,12 @@ namespace Arvan\Vod\Extensions;
 
 trait CommonFunctions
 {
-    public function getBodyContents($body)
+    public function getBodyContents($body, $status)
     {
-        return json_decode($body);
+        return [
+            'body' => json_decode($body),
+            'status_code' => $status
+        ];
     }
 
     public function urlBuilder(string $url, string $key = null, string $value = null)
