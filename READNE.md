@@ -183,6 +183,28 @@ $allChannelWarermark = $watermark->showAll($channelId) // channel ID must be set
 // GET (get specific watermkark)
 $getWatermark = $watermark->showAll('********-****-****-****-********');  //WatermarkId
 
-// Post ()
+// Post
+
+$newWatermark = $watermark->create([
+            'title' => 'test',
+            'description' => 'dasdas',
+            'watermark' => storage_path('1.jpg')
+
+        ], 'channel_id');
+        
+// PATCH
+
+$updatedWatermark = $watermark->update([
+    'title' => 'new Name',
+    'description' => 'updated description'
+]);
+
+// DELETE (by watermark ID)
+
+$watermark->delete('********-****-****-****-********');  //WatermarkId
+```
+7. Subtitle:
+
+```php
 
 ```
