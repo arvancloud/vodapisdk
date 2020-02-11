@@ -4,11 +4,11 @@ namespace Arvan\Vod\Api\V2_0;
 
 use Arvan\Vod\ApiException;
 use Arvan\Vod\Config\Routes;
-use GuzzleHttp\Psr7\Request;
-use Arvan\Vod\ObjectSerializer;
-use GuzzleHttp\Psr7\MultipartStream;
 use Arvan\Vod\Extensions\CommonFunctions;
+use Arvan\Vod\ObjectSerializer;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\Request;
 
 final class File extends BaseClass
 {
@@ -153,7 +153,7 @@ final class File extends BaseClass
 
         return new Request(
             'HEAD',
-            $resourcePath.($query ? "?{$query}" : ''),
+            $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -192,13 +192,13 @@ final class File extends BaseClass
                 );
             }
 
-            return [$this->getBodyContents($response->getBody()->getContents()), $statusCode];
+            return ['body' => $url, 'status' => $statusCode];
         } catch (ApiException $e) {
             throw $e->getCode();
         }
     }
 
-    protected function transferFileToServer(string $url, int $offset)
+    protected function transferFileToServer(array $url, int $offset)
     {
         $tus_resumable = self::TUS_VERSION;
         $content_type = 'application/offset+octet-stream';
@@ -209,7 +209,7 @@ final class File extends BaseClass
             );
         }
 
-        $resourcePath = $url;
+        $resourcePath = $url['url'];
         $formParams = $this->fileInfo;
         $queryParams = [];
         $headerParams = [];
@@ -298,7 +298,7 @@ final class File extends BaseClass
 
         return new Request(
             'PATCH',
-            $resourcePath.($query ? "?{$query}" : ''),
+            $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -462,7 +462,7 @@ final class File extends BaseClass
 
         return new Request(
             'POST',
-            $this->config->getHost().$resourcePath.($query ? "?{$query}" : ''),
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

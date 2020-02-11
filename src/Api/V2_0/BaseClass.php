@@ -116,7 +116,7 @@ abstract class BaseClass
                 );
             }
 
-            return [$this->getBodyContents($response->getBody()->getContents()), $statusCode];
+            return $this->getBodyContents($response->getBody()->getContents(), $statusCode);
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
