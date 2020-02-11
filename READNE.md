@@ -98,7 +98,12 @@ $allChannelFiles = $file->showAll($channelId) // channel ID must be set as a str
 
 $music = storage_path('music.mp3');
 $storageUrl = $file->createStorage($channelId, $music);
-$uploadedFile = $file->upload($storageUrl); // response will be file id and URL, URL can be used to get file offset in order to findout whether the file is completely uploaded or not.
+
+**
+* response will be file id and URL, URL can be used to get file offset
+* in order to findout whether the file is completely uploaded or not.
+*/
+$uploadedFile = $file->upload($storageUrl);
 
 // HEAD (Uploaded file url is required)
 $fileOffset = $file->getOffset('https://napi.arvancloud.com/**************');
@@ -107,4 +112,62 @@ $fileOffset = $file->getOffset('https://napi.arvancloud.com/**************');
 
 $file->delete('********-****-****-****-********');
 ```
-## congrats bro, you've just finished the first step,
+5. Video / Audio:
+
+```php
+$channelId = 'xxxx-xxxx-xxxx-xxxx';
+$fileId = 'xxxx-xxxx-xxxx-xxxx';
+$video = $file->video();
+
+// GET (get the whole channel videos)
+
+$allChannelVideos = $video->showAll($channelId);
+
+// GET (get specific video by ID)
+
+$getVideo = $video->showAll('********-****-****-****-********');  //VideoId
+
+// POST (convert an uploaded file / upload with an address (URL)
+$newVideo = $video->create([
+    [
+        'title' => 'string',
+        'description' => 'string',
+        'video_url' => 'string', // should be null or removed if file_id is exist 
+        'file_id' => 'string',
+        'convert_mode' => 'auto/manual/profile',
+        'profile_id' => 'string',
+        'parallel_convert' => false,
+        'thumbnail_time' => 0,
+        'watermark_id' => 'string',
+        'watermark_area' => 'CENTER', // required if watermark_id is set
+        'convert_info' => [         // required if convert_mode is manual
+            [
+                'audio_bitrate' => 0,
+                'video_bitrate' => 0,
+                'resolution' => 'string'
+            ],
+            [
+                'audio_bitrate' => 0,
+                'video_bitrate' => 0,
+                'resolution' => 'string'
+            ],
+            [
+                'audio_bitrate' => 0,
+                'video_bitrate' => 0,
+                'resolution' => 'string'
+            ]
+        ]
+    ]
+]);
+
+// PATCH (update video or audio. Only title and description are editable)
+
+$updatedVideo = $video->update('video_id', [
+    'title' => 'whatever',
+    'description' => 'something...'
+]);
+
+// DELETE (by video / audio ID)
+
+$video->delete('********-****-****-****-********');
+```
