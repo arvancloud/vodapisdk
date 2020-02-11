@@ -4,8 +4,8 @@ namespace Arvan\Vod\Config;
 
 class Routes
 {
-    const CREATE_USER_DOMAIN = '/domains';
-    const GET_USER_DOMAIN = '/domains';
+    const CREATE_USER_DOMAIN = '/domain';
+    const GET_USER_DOMAIN = '/domain';
 
     const GET_CHANNELS = '/channels';
     const GET_CHANNEL = '/channels/channel_id';
@@ -35,4 +35,16 @@ class Routes
     const CREATE_WATERMARK = '/channels/channel_id/watermarks';
     const UPDATE_WATERMARK = '/watermarks/watermark_id';
     const DELETE_WATERMARK = '/watermarks/watermark_id';
+
+    const GET_SUBTITLES = '/channels/channel_id/subtitles';
+    const GET_SUBTITLE = '/subtitles/subtitle_id';
+    const CREATE_SUBTITLE = '/channels/channel_id/subtitles';
+    const UPDATE_SUBTITLE = '/subtitles/subtitle_id';
+    const DELETE_SUBTITLE = '/subtitles/subtitle_id';
+
+    const GET_PROFILES = '/channels/channel_id/profiles';
+    const GET_PROFILE = '/profiles/profile_id';
+    const CREATE_PROFILE = '/channels/channel_id/profiles';
+    const UPDATE_PROFILE = '/profiles/profile_id';
+    const DELETE_PROFILE = '/profiles/profile_id';
 }
