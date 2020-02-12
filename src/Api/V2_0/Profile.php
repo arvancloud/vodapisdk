@@ -6,9 +6,14 @@ use Arvan\Vod\Config\Routes;
 
 final class Profile extends BaseClass
 {
-    public function showAll(array $options = null)
+    public function showAll(string $channelId, array $options = null)
     {
-        $result = $this->createGetRequest(Routes::GET_PROFILES, $options);
+        $result = $this->createGetRequest(
+            Routes::GET_PROFILES,
+            $options,
+            'channel_id',
+            $channelId
+        );
 
         return $result;
     }
