@@ -206,5 +206,19 @@ $watermark->delete('********-****-****-****-********');  //WatermarkId
 7. Subtitle:
 
 ```php
+// GET (get all video subtitles)
+$subtitle = $vodSdk->subtitle();
+$videoSubtitles = $subtitle->showAll('********-****-****-****-********');  //VideoId
 
+// GET (get specific subtitle)
+$subtitle = $subtitle->show('********-****-****-****-********');  //SubtitleId
+
+// POST (create a subtitle)
+$newSubtitle = $subtitle->create([
+            'lang' => 'en',
+            'subtitle' => storage_path('test.vtt')
+        ], '********-****-****-****-********');  //VideoId
+        
+// DELETE
+$subtitle->delete('********-****-****-****-********');  //SubtitleId
 ```
