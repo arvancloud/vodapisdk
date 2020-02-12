@@ -1,6 +1,6 @@
 # VOD SDK is a client package to connect to Arvan VOD API to make your life much easier :)
 
-### This package has written in pure php which can be implemented in any PHP framework. As laravel is more popular among our customers, the below code demonstrates laravel implementation.
+### This package has written in pure php which can be implemented in any PHP framework.
 
 #### For more details please kindly take a look at the [API Doc](https://napi.arvancloud.com/docs/vod/2.0#/)
 1. The Package has too registered
