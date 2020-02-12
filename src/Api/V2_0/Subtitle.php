@@ -6,13 +6,14 @@ use Arvan\Vod\Config\Routes;
 
 final class Subtitle extends BaseClass
 {
-    public function showAll(string $channelId, array $options = null)
+    public function showAll(string $videoId, array $options = null)
     {
         $result = $this->createGetRequest(
-        Routes::GET_SUBTITLES,
+            Routes::GET_SUBTITLES,
             $options,
-            'channel_id',
-            $channelId);
+            'video_id',
+            $videoId
+        );
 
         return $result;
     }
@@ -24,23 +25,16 @@ final class Subtitle extends BaseClass
         return $result;
     }
 
-    public function create(array $subtitle, string $channelId)
+    public function create(array $subtitle, string $videoId)
     {
         $result = $this->createPostRequest(
             Routes::CREATE_SUBTITLE,
             $subtitle,
-            'channel_id',
-            $channelId,
+            'video_id',
+            $videoId,
             true,
             'subtitle'
         );
-
-        return $result;
-    }
-
-    public function update(string $subtitleId, array $subtitle)
-    {
-        $result = $this->createPatchOrDeleteRequest(Routes::UPDATE_SUBTITLE, 'subtitle_id', $subtitleId, $subtitle);
 
         return $result;
     }

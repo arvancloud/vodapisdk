@@ -36,10 +36,9 @@ class Routes
     const UPDATE_WATERMARK = '/watermarks/watermark_id';
     const DELETE_WATERMARK = '/watermarks/watermark_id';
 
-    const GET_SUBTITLES = '/channels/channel_id/subtitles';
+    const GET_SUBTITLES = '/videos/video_id/subtitles';
     const GET_SUBTITLE = '/subtitles/subtitle_id';
-    const CREATE_SUBTITLE = '/channels/channel_id/subtitles';
-    const UPDATE_SUBTITLE = '/subtitles/subtitle_id';
+    const CREATE_SUBTITLE = '/videos/video_id/subtitles';
     const DELETE_SUBTITLE = '/subtitles/subtitle_id';
 
     const GET_PROFILES = '/channels/channel_id/profiles';
