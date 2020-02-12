@@ -41,7 +41,6 @@ $vodSdk = app('arvan-vod-sdk');
 */
  
 // POST
-
 $userDomain = $vodkSdk->userDomain();
 
 $createdDomain = $userDomain->createDomain(['subdomain' => 'whatever']);
@@ -71,28 +70,23 @@ $newChannel = $channel-> create([
 ]);
 
 // GET (all channels)
-
 $allChannels = $channel->showAll();
 
 // GET (get specific channhel by id)
-
 $channelDetails = $channel->show('********-****-****-****-********')
 
 // PATCH (update a channel)
-
 $updatedChannel = $channel->update('5c6b18de-9763-423f-8d3e-f2e84e93c9d5', [
     'title' => 'whatever from sdk'
     ]);
     
 // DELETE (delete a channel) 
-
 $channel->update('********-****-****-****-********');
 ```
 4. File:
 
 ```php
 // GET (get the whole channel files)
-
 $channelId = 'xxxx-xxxx-xxxx-xxxx';
 $file = $vodSdk->file();
 $allChannelFiles = $file->showAll($channelId) // channel ID must be set as a string
@@ -110,7 +104,6 @@ $uploadedFile = $file->upload($storageUrl);
 $fileOffset = $file->getOffset('https://napi.arvancloud.com/**************');
 
 // DELETE (by file ID)
-
 $file->delete('********-****-****-****-********');
 ```
 5. Video / Audio:
@@ -121,11 +114,9 @@ $fileId = 'xxxx-xxxx-xxxx-xxxx';
 $video = $file->video();
 
 // GET (get the whole channel videos)
-
 $allChannelVideos = $video->showAll($channelId);
 
 // GET (get specific video by ID)
-
 $getVideo = $video->showAll('********-****-****-****-********');  //VideoId
 
 // POST (convert an uploaded file / upload with an address (URL)
@@ -162,14 +153,12 @@ $newVideo = $video->create([
 ]);
 
 // PATCH (update video or audio. Only title and description are editable)
-
 $updatedVideo = $video->update('video_id', [
     'title' => 'whatever',
     'description' => 'something...'
 ]);
 
 // DELETE (by video / audio ID)
-
 $video->delete('********-****-****-****-********');
 ```
 6. Watermark:
@@ -184,7 +173,6 @@ $allChannelWarermark = $watermark->showAll($channelId) // channel ID must be set
 $getWatermark = $watermark->showAll('********-****-****-****-********');  //WatermarkId
 
 // Post
-
 $newWatermark = $watermark->create([
             'title' => 'test',
             'description' => 'dasdas',
@@ -193,21 +181,21 @@ $newWatermark = $watermark->create([
         ], 'channel_id');
         
 // PATCH
-
 $updatedWatermark = $watermark->update([
     'title' => 'new Name',
     'description' => 'updated description'
 ]);
 
 // DELETE (by watermark ID)
-
 $watermark->delete('********-****-****-****-********');  //WatermarkId
 ```
 7. Subtitle:
 
 ```php
-// GET (get all video subtitles)
+
 $subtitle = $vodSdk->subtitle();
+
+// GET (get all video subtitles)
 $videoSubtitles = $subtitle->showAll('********-****-****-****-********');  //VideoId
 
 // GET (get specific subtitle)
@@ -221,4 +209,52 @@ $newSubtitle = $subtitle->create([
         
 // DELETE
 $subtitle->delete('********-****-****-****-********');  //SubtitleId
+```
+8. Porfile:
+
+```php
+$profile = $vodSdk->profile();
+
+//GET (get all channel profiles)
+$allChannelprofiles = $profile->showAll('********-****-****-****-********');  //ChannelID
+
+//GET (get specific profile)
+$profile = $profile->show('********-****-****-****-********');  //ProfileID
+
+//POST
+$newProfile = $profile->create([
+        'title' => 'string',
+        'description' => 'string',
+        'convert_mode' => 'auto',
+        'thumbnail_time' => 0,
+        'watermark_id' => 'string',
+        'watermark_area' => 'CENTER',
+        'convert_info' => [
+            [
+                'audio_bitrate' => 0,
+                'video_bitrate' => 0,
+                'resolution' => 'string'
+            ]
+        ]
+    ], '********-****-****-****-********');  //ChannelID
+    
+//PATCH
+
+$newProfile = $profile->update('8a953ada-30b6-4279-b1ba-217ca108c06a', [
+        'title' => 'updated title',
+        'description' => 'updated description',
+        'convert_mode' => 'manual',
+        'thumbnail_time' => 1,
+        'convert_info' => [
+            [
+                'audio_bitrate' => ***,
+                'video_bitrate' => ***,
+                'resolution' => '****x***'
+            ]
+        ]
+    ]);
+
+// DELETE
+$profile->delete('********-****-****-****-********');  //ProfileId
+
 ```
