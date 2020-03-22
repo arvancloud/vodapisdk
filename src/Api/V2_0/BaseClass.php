@@ -2,17 +2,17 @@
 
 namespace Arvan\Vod\Api\V2_0;
 
-use GuzzleHttp\Client;
-use Arvan\Vod\HeaderSetup;
 use Arvan\Vod\ApiException;
 use Arvan\Vod\Configuration;
+use Arvan\Vod\Extensions\CommonFunctions;
+use Arvan\Vod\HeaderSetup;
+use Arvan\Vod\ObjectSerializer;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
-use Arvan\Vod\ObjectSerializer;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7\MultipartStream;
-use Arvan\Vod\Extensions\CommonFunctions;
-use GuzzleHttp\Exception\RequestException;
 
 abstract class BaseClass
 {
@@ -145,8 +145,8 @@ abstract class BaseClass
         $multipart = false,
         $contentType = null,
         $hasFile = null,
-        $fileName = null)
-    {
+        $fileName = null
+    ) {
         $resourcePath = $route;
         $formParams = [];
         $queryParams = [];
@@ -162,7 +162,7 @@ abstract class BaseClass
             $queryParams['page'] = ObjectSerializer::toQueryValue($page);
         }
 
-        if(isset($_tempBody)) {
+        if (isset($_tempBody)) {
             foreach ($_tempBody as $key => $value) {
                 $formParams[$key] = $value;
             }
@@ -197,13 +197,13 @@ abstract class BaseClass
             // $_tempBody is the method argument, if present
             $httpBody = $_tempBody;
 
-            if($headers['Content-Type'] === 'application/json') {
+            if ($headers['Content-Type'] === 'application/json') {
                 // \stdClass has no __toString(), so we should encode it manually
                 if ($httpBody instanceof \stdClass) {
                     $httpBody = \GuzzleHttp\json_encode($httpBody);
                 }
                 // array has no __toString(), so we should encode it manually
-                if(is_array($httpBody)) {
+                if (is_array($httpBody)) {
                     $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($httpBody));
                 }
             }
@@ -220,7 +220,6 @@ abstract class BaseClass
                 $httpBody = new MultipartStream($multipartContents);
             } elseif ($headers['Content-Type'] === 'application/json') {
                 $httpBody = \GuzzleHttp\json_encode($formParams);
-
             } else {
                 // for HTTP post (form)
                 $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
@@ -243,7 +242,7 @@ abstract class BaseClass
 
         return new Request(
             $method,
-            $this->config->getHost().$resourcePath.($query ? "?{$query}" : ''),
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -255,7 +254,7 @@ abstract class BaseClass
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
             if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: '.$this->config->getDebugFile());
+                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
@@ -278,8 +277,8 @@ abstract class BaseClass
         string $endpointValue = null,
         bool $hasFile = false,
         string $fileName = null,
-        string $defaultContentTye = 'application/json')
-    {
+        string $defaultContentTye = 'application/json'
+    ) {
         $result = null;
 
         try {
@@ -290,7 +289,7 @@ abstract class BaseClass
                 'content_type' => $defaultContentTye,
                 'hasFile' => $hasFile,
                 'fileName' => $fileName
-                ]);
+            ]);
         } catch (\Throwable $e) {
             $result = $e->getMessage();
         }
@@ -305,9 +304,9 @@ abstract class BaseClass
         try {
             $result = $this->createClientHttpRequest([
                 'method' => $method,
-                 'route' => $this->urlBuilder($endPoint, $key, $value),
-                 '_tempBody' => $body,
-                 ]);
+                'route' => $this->urlBuilder($endPoint, $key, $value),
+                '_tempBody' => $body,
+            ]);
         } catch (\Throwable $e) {
             $result = $e->getMessage();
         }
@@ -322,12 +321,14 @@ abstract class BaseClass
         $queryParams['filter'] = isset($options) ? $options['filter'] : null;
         $queryParams['page'] = isset($options) ? $options['page'] : null;
         $queryParams['per_page'] = isset($options) ? $options['per_page'] : null;
+        $queryParams['secure_ip'] = isset($options) ? $options['secure_ip'] : null;
+        $queryParams['secure_expire_time'] = isset($options) ? $options['secure_expire_time'] : null;
 
         try {
             $response = $this->createClientHttpRequest([
                 'method' => 'GET',
-                'route' => $this->urlBuilder($endPoint, $keyId, $id).'?'.$this->queryStringBuilder($queryParams),
-                ]);
+                'route' => $this->urlBuilder($endPoint, $keyId, $id) . '?' . $this->queryStringBuilder($queryParams),
+            ]);
         } catch (\Throwable $e) {
             $response = $e->getMessage();
         }

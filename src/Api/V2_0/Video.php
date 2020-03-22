@@ -13,9 +13,9 @@ final class Video extends BaseClass
         return $result;
     }
 
-    public function show(string $videoId)
+    public function show(string $videoId, array $options = null)
     {
-        $result = $this->createGetRequest(Routes::GET_VIDEO, null, 'video_id', $videoId);
+        $result = $this->createGetRequest(Routes::GET_VIDEO, $options, 'video_id', $videoId);
 
         return $result;
     }

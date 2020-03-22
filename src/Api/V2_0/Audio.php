@@ -13,9 +13,9 @@ final class Audio extends BaseClass
         return $result;
     }
 
-    public function show(string $audioId)
+    public function show(string $audioId, array $options = null)
     {
-        $result = $this->createGetRequest(Routes::GET_AUDIO, null, 'audio_id', $audioId);
+        $result = $this->createGetRequest(Routes::GET_AUDIO, $options, 'audio_id', $audioId);
 
         return $result;
     }
