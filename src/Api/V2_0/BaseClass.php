@@ -318,11 +318,11 @@ abstract class BaseClass
     {
         $result = null;
 
-        $queryParams['filter'] = isset($options) ? $options['filter'] : null;
-        $queryParams['page'] = isset($options) ? $options['page'] : null;
-        $queryParams['per_page'] = isset($options) ? $options['per_page'] : null;
-        $queryParams['secure_ip'] = isset($options) ? $options['secure_ip'] : null;
-        $queryParams['secure_expire_time'] = isset($options) ? $options['secure_expire_time'] : null;
+        $queryParams['filter'] = isset($options['filter']) ? $options['filter'] : null;
+        $queryParams['page'] = isset($options['page']) ? $options['page'] : null;
+        $queryParams['per_page'] = isset($options['per_page']) ? $options['per_page'] : null;
+        $queryParams['secure_ip'] = isset($options['secure_ip']) ? $options['secure_ip'] : null;
+        $queryParams['secure_expire_time'] = isset($options['secure_expire_time']) ? $options['secure_expire_time'] : null;
 
         try {
             $response = $this->createClientHttpRequest([
