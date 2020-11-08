@@ -1,10 +1,10 @@
 {
-  "name": "arvan/vod-client-sdk",
+  "name": "kharestani/vod-client-sdk",
   "type": "library",
   "description": "This is a client package to make your development process more faster.",
   "authors": [{
-    "name": "Farshid Boroomand",
-    "email": "farshid@arvancloud.com"
+    "name": "Reza Kharestani",
+    "email": "m.r.kharestani13@gmail.com"
   }],
   "minimum-stability": "stable",
   "prefer-stable": true,
