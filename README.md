@@ -121,36 +121,34 @@ $getVideo = $video->showAll('********-****-****-****-********');  //VideoId
 
 // POST (convert an uploaded file / upload with an address (URL)
 $newVideo = $video->create([
-    [
-        'title' => 'string',
-        'description' => 'string',
-        'video_url' => 'string', // should be null or removed if file_id is exist 
-        'file_id' => 'string',
-        'convert_mode' => 'auto/manual/profile',
-        'profile_id' => 'string',
-        'parallel_convert' => false,
-        'thumbnail_time' => 0,
-        'watermark_id' => 'string',
-        'watermark_area' => 'CENTER', // required if watermark_id is set
-        'convert_info' => [         // required if convert_mode is manual
-            [
-                'audio_bitrate' => 0,
-                'video_bitrate' => 0,
-                'resolution' => 'string'
-            ],
-            [
-                'audio_bitrate' => 0,
-                'video_bitrate' => 0,
-                'resolution' => 'string'
-            ],
-            [
-                'audio_bitrate' => 0,
-                'video_bitrate' => 0,
-                'resolution' => 'string'
-            ]
+    'title' => 'string',
+    'description' => 'string',
+    'video_url' => 'string', // should be null or removed if file_id is exist 
+    'file_id' => 'string',
+    'convert_mode' => 'auto/manual/profile',
+    'profile_id' => 'string',
+    'parallel_convert' => false,
+    'thumbnail_time' => 0,
+    'watermark_id' => 'string',
+    'watermark_area' => 'CENTER', // required if watermark_id is set
+    'convert_info' => [         // required if convert_mode is manual
+        [
+            'audio_bitrate' => 0,
+            'video_bitrate' => 0,
+            'resolution' => 'string'
+        ],
+        [
+            'audio_bitrate' => 0,
+            'video_bitrate' => 0,
+            'resolution' => 'string'
+        ],
+        [
+            'audio_bitrate' => 0,
+            'video_bitrate' => 0,
+            'resolution' => 'string'
         ]
     ]
-]);
+], channelId);
 
 // PATCH (update video or audio. Only title and description are editable)
 $updatedVideo = $video->update('video_id', [
