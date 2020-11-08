@@ -26,7 +26,7 @@ final class Video extends BaseClass
             Routes::CREATE_VIDEO,
             $video,
             'channel_id',
-            $channelId,
+            $channelId
         );
 
         return $result;
