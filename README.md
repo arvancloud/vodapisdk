@@ -111,7 +111,7 @@ $file->delete('********-****-****-****-********');
 ```php
 $channelId = 'xxxx-xxxx-xxxx-xxxx';
 $fileId = 'xxxx-xxxx-xxxx-xxxx';
-$video = $file->video();
+$video = $vodSdk->video();
 
 // GET (get the whole channel videos)
 $allChannelVideos = $video->showAll($channelId);
