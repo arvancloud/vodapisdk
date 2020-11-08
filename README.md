@@ -150,7 +150,7 @@ $newVideo = $video->create([
             ]
         ]
     ]
-]);
+], channelId);
 
 // PATCH (update video or audio. Only title and description are editable)
 $updatedVideo = $video->update('video_id', [
