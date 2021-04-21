@@ -10,7 +10,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.1",
-    "guzzlehttp/guzzle": ">=6.3",
+    "guzzlehttp/guzzle": "^6.3",
     "ankitpokhrel/tus-php": "^0.0.0"
   },
   "autoload": {
