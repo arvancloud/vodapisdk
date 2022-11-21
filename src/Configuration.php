@@ -33,7 +33,7 @@ class Configuration
     /**
      * @var string
      */
-    private $host = 'https://napi.arvancloud.com/vod/2.0';
+    private $host = 'https://napi.arvancloud.ir/vod/2.0';
 
     /**
      * Debug switch (default set to false).
@@ -165,10 +165,10 @@ class Configuration
      */
     public static function toDebugReport()
     {
-        $report = 'PHP SDK (Arvan\Vod) Debug Report:'.PHP_EOL;
-        $report .= '    OS: '.php_uname().PHP_EOL;
-        $report .= '    PHP Version: '.PHP_VERSION.PHP_EOL;
-        $report .= '    OpenAPI Spec Version: 2.0'.PHP_EOL;
+        $report = 'PHP SDK (Arvan\Vod) Debug Report:' . PHP_EOL;
+        $report .= '    OS: ' . php_uname() . PHP_EOL;
+        $report .= '    PHP Version: ' . PHP_VERSION . PHP_EOL;
+        $report .= '    OpenAPI Spec Version: 2.0' . PHP_EOL;
 
         return $report;
     }
@@ -192,7 +192,7 @@ class Configuration
         if ($prefix === null) {
             $keyWithPrefix = $apiKey;
         } else {
-            $keyWithPrefix = $prefix.' '.$apiKey;
+            $keyWithPrefix = $prefix . ' ' . $apiKey;
         }
 
         return $keyWithPrefix;
